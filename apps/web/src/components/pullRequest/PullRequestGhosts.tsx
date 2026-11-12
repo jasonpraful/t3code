@@ -284,12 +284,13 @@ export function PullRequestDetailGhost({
         <PullRequestDetailTabBar tabs={tabs} value={selectedTab} inert>
           {checksPresentation ? (
             <PullRequestChecksStatusLine
-              className={checksPresentation.toneClassName}
+              className={cn("flex-1", checksPresentation.toneClassName)}
               icon={<checksPresentation.Icon aria-hidden className="size-3.5" />}
               label={checksPresentation.label}
             />
           ) : (
             <PullRequestChecksStatusLine
+              className="flex-1"
               icon={<GhostBar className="my-px size-3.5 rounded-full" />}
               label={<GhostBar className="w-28" />}
             />

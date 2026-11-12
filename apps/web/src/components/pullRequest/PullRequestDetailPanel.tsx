@@ -1339,10 +1339,18 @@ export function PullRequestDetailPanel({
   };
   const showsApproveWorkflows =
     workflowApprovalsRequired > 0 && !checksStale && can("approve-workflows");
+  const checksPresentation =
+    checksState === null ? null : pullRequestChecksStatePresentation(checksState);
+  const checksIcon = checksPresentation ? (
+    <checksPresentation.Icon
+      aria-hidden
+      className={cn("size-3.5", checksPresentation.toneClassName)}
+    />
+  ) : (
+    <CircleDotIcon aria-hidden className="size-3.5" />
+  );
   const checksSummary = checksStale
-    ? checksState === null
-      ? "No checks reported"
-      : pullRequestChecksStatePresentation(checksState).label
+    ? (checksPresentation?.label ?? "No checks reported")
     : detail
       ? summarizePullRequestChecks(detail.checks)
       : null;
@@ -1726,22 +1734,26 @@ export function PullRequestDetailPanel({
                   pendingAction={pendingAction}
                   perform={perform}
                 />
+              ) : checksState !== null ? (
+                <span className="flex min-w-0 flex-1 justify-end">
+                  <PullRequestChecksPopover
+                    variant="count"
+                    checks={detail.checks}
+                    stale={checksStale}
+                    checksState={checksState}
+                    threadRef={threadRef}
+                    render={
+                      <Button variant="ghost-muted" size="xs" className="-me-2 min-w-0 shrink" />
+                    }
+                  >
+                    <PullRequestChecksStatusLine icon={checksIcon} label={checksSummary} />
+                  </PullRequestChecksPopover>
+                </span>
               ) : (
                 <PullRequestChecksStatusLine
-                  className="text-muted-foreground"
+                  className="flex-1 text-muted-foreground"
                   aria-label={checksSummary ? `Checks: ${checksSummary}` : "Checks"}
-                  icon={
-                    checksState !== null ? (
-                      <PullRequestChecksPopover
-                        checks={detail.checks}
-                        stale={checksStale}
-                        checksState={checksState}
-                        threadRef={threadRef}
-                      />
-                    ) : (
-                      <CircleDotIcon aria-hidden className="size-3.5" />
-                    )
-                  }
+                  icon={checksIcon}
                   label={checksSummary}
                 />
               )

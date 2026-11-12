@@ -118,7 +118,7 @@ export function PullRequestChecksStatusLine({
   return (
     <span
       className={cn(
-        "ml-auto flex h-4 min-w-0 flex-1 flex-wrap content-start items-center justify-end gap-x-1.5 overflow-hidden text-xs",
+        "flex h-4 min-w-0 flex-wrap content-start items-center justify-end gap-x-1.5 overflow-y-clip text-xs",
         className,
       )}
       {...props}

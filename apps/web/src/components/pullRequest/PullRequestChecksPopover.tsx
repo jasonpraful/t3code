@@ -137,6 +137,7 @@ export function PullRequestChecksPopover({
   variant = "icon",
   className,
   render,
+  children,
 }: {
   checksState: PullRequestChecksState;
   checks?: ReadonlyArray<PullRequestCheck>;
@@ -147,6 +148,7 @@ export function PullRequestChecksPopover({
   variant?: "icon" | "count";
   className?: string;
   render?: React.ReactElement;
+  children?: React.ReactNode;
 }) {
   const presentation = pullRequestChecksStatePresentation(checksState);
   const incompleteCount =
@@ -178,18 +180,20 @@ export function PullRequestChecksPopover({
         }
         onClick={(event) => event.stopPropagation()}
       >
-        <presentation.Icon aria-hidden className={cn("size-3.5", presentation.toneClassName)} />
-        {variant === "count" ? (
+        {children ?? (
           <>
-            {checks !== undefined && incompleteCount > 0 ? (
-              <span className="tabular-nums">
-                {checks.length - incompleteCount}/{checks.length} checks
-              </span>
-            ) : failedCount > 0 ? (
-              <span className="tabular-nums">{failedCount} failed</span>
+            <presentation.Icon aria-hidden className={cn("size-3.5", presentation.toneClassName)} />
+            {variant === "count" ? (
+              checks !== undefined && incompleteCount > 0 ? (
+                <span className="tabular-nums">
+                  {checks.length - incompleteCount}/{checks.length} checks
+                </span>
+              ) : failedCount > 0 ? (
+                <span className="tabular-nums">{failedCount} failed</span>
+              ) : null
             ) : null}
           </>
-        ) : null}
+        )}
       </PopoverTrigger>
       <PopoverPopup align="start" width="md" side="bottom">
         <p className="mb-2 font-medium text-sm">{presentation.label}</p>
